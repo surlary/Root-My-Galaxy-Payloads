@@ -1,0 +1,43 @@
+name: Build Payload
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Build target"
+        required: false
+        default: "m1q-S9420ZCS3AZF1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache NDK
+        id: cache-ndk
+        uses: actions/cache@v4
+        with:
+          path: /opt/android-ndk
+          key: ndk-r29-linux
+
+      - name: Install NDK
+        if: steps.cache-ndk.outputs.cache-hit != 'true'
+        run: |
+          curl -sL -o /tmp/ndk.zip https://dl.google.com/android/repository/android-ndk-r29-linux.zip
+          mkdir -p /opt/android-ndk
+          unzip -q /tmp/ndk.zip -d /opt/android-ndk
+          rm /tmp/ndk.zip
+
+      - name: Build
+        run: |
+          NDK_HOME=$(find /opt/android-ndk -maxdepth 1 -type d -name "android-ndk-*" | head -1)
+          make TARGET=${{ github.event.inputs.target || 'm1q-S9420ZCS3AZF1' }} \
+            ANDROID_NDK_HOME="$NDK_HOME" release
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: cve-2026-43499-${{ github.event.inputs.target || 'm1q-S9420ZCS3AZF1' }}
+          path: build/*/cve-2026-43499-app.release.so
