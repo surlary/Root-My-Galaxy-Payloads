@@ -34,10 +34,13 @@ jobs:
         run: |
           NDK_HOME=$(find /opt/android-ndk -maxdepth 1 -type d -name "android-ndk-*" | head -1)
           make TARGET=${{ github.event.inputs.target || 'm1q-S9420ZCS3AZF1' }} \
-            ANDROID_NDK_HOME="$NDK_HOME" release
+            ANDROID_NDK_HOME="$NDK_HOME" all
 
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: cve-2026-43499-${{ github.event.inputs.target || 'm1q-S9420ZCS3AZF1' }}
-          path: build/*/cve-2026-43499-app.release.so
+          path: |
+            build/*/cve-2026-43499-app.so
+            build/*/cve-2026-43499
+            build/*/cve-2026-43499-root
